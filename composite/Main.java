@@ -11,6 +11,7 @@ public class Main {
         HeadDepartment headDepartment = new HeadDepartment(20,"Main department");
         headDepartment.addDepartment(financialDepartment);
         headDepartment.addDepartment(securityDepartment);
+
         headDepartment.printDepartmentName();
         System.out.println("All personnel count is " + headDepartment.countAllPersonnel());
 
