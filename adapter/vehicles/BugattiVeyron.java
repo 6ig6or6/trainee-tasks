@@ -2,7 +2,7 @@ package org.example.gofpatterns.adapter.vehicles;
 
 public class BugattiVeyron implements Movable{
     @Override
-    public double getMaxSpeed() {
+    public double getMaxSpeedInMiles() {
         return 268;
     }
 }

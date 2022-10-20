@@ -10,8 +10,8 @@ public class MovableAdapterImpl implements MovableAdapter {
     }
 
     @Override
-    public double getMaxSpeed() {
-        return convertFromMPHtoMPK(vehicle.getMaxSpeed());
+    public double getMaxSpeedInKilometers() {
+        return convertFromMPHtoMPK(vehicle.getMaxSpeedInMiles());
     }
 
     private double convertFromMPHtoMPK(double speedInMiles) {
