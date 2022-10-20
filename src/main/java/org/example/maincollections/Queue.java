@@ -35,9 +35,24 @@ public class Queue<E> {
         return first.getElement();
     }
 
-
     public int size() {
         return size;
+    }
+    @Override
+    public String toString() {
+        if (first == null) {
+            return "Queue {}";
+        }
+        Node<E> currentNode = first;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Queue {");
+        while (currentNode != null) {
+            stringBuilder.append(currentNode.element).append(", ");
+            currentNode = currentNode.nextNode;
+        }
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
     private static class Node<E> {

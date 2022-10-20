@@ -4,8 +4,7 @@ import java.util.NoSuchElementException;
 
 public class LinkedList<E> {
     private int size;
-    private Node<E> firstNode;
-    private Node<E> lastNode;
+    private Node<E> firstNode, lastNode;
 
     public boolean contains(E e) {
         Node<E> currentNode = firstNode;

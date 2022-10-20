@@ -39,6 +39,8 @@ class QueueTest {
         queue.add("new string 1");
         queue.peek();
         assertEquals(3, queue.size());
+        String s = (String) queue.peek();
+        assertEquals("new string 3", s);
     }
     @Test
     void pollOnEmptyQueue() {
@@ -53,6 +55,15 @@ class QueueTest {
         queue.peek();
         queue.add(90);
         assertEquals(2, queue.size());
+    }
+    @Test
+    void toStringTest() throws Exception {
+        queue.add(1);
+        queue.add(36);
+        queue.poll();
+        queue.peek();
+        queue.add(90);
+        assertEquals("Queue {36, 90}", queue.toString());
     }
 
 }

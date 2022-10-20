@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LinkedListTest {
     LinkedList<Object> list;
-
     @BeforeEach
     void init() {
         list = new LinkedList<>();
