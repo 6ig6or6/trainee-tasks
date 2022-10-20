@@ -12,7 +12,6 @@ class LinkedListTest {
     void init() {
         list = new LinkedList<>();
     }
-
     @Test
     void contains() {
         list.addLast(100);
