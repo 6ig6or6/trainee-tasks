@@ -37,6 +37,11 @@ class LinkedListTest {
         list.addLast(128);
         assertEquals(128, list.getLast());
     }
+    @Test
+    void getByIndex() {
+       addStrings();
+       assertEquals("object 3", list.get(2));
+    }
 
     @Test
     void addLast() {
@@ -54,6 +59,12 @@ class LinkedListTest {
         assertEquals(list.getLast(), 7);
         assertEquals(list.size(), 3);
         assertEquals(1, list.getFirst());
+    }
+    @Test
+    void addByIndex() {
+        addStrings();
+        list.add(1, "new String");
+        assertEquals("new String", list.get(1));
     }
 
     @Test
@@ -79,6 +90,12 @@ class LinkedListTest {
         list.removeAllOccurrences("object 1");
         assertEquals(1, list.size());
     }
+    @Test
+    void removeByIndex() {
+        addStrings();
+        list.remove(1);
+        assertEquals(2, list.size());
+    }
 
     @Test
     void removeAllOnEmptyList() {
@@ -101,6 +118,13 @@ class LinkedListTest {
     void sizeOfEmptyList() {
         assertEquals(0, list.size());
     }
+    @Test
+    void indexOf() {
+        addStrings();
+        assertEquals(0, list.indexOf("object 1"));
+        assertEquals(2, list.indexOf("object 3"));
+        assertEquals(-1, list.indexOf("non-existing object"));
+    }
 
     @Test
     void listToString() {
@@ -109,5 +133,10 @@ class LinkedListTest {
         list.addFirst(1);
         list.addLast(5);
         assertEquals("LinkedList {1, 3, 4, 5}", list.toString());
+    }
+    private void addStrings() {
+        list.add("object 1");
+        list.add("object 2");
+        list.add("object 3");
     }
 }

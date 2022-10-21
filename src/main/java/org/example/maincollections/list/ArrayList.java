@@ -92,7 +92,6 @@ public class ArrayList<T> implements List<T> {
             array[i] = array[i + 1];
         }
         size--;
-
         return removedElement;
     }
 
@@ -137,7 +136,6 @@ public class ArrayList<T> implements List<T> {
         return Stream.of(arrays)
                 .flatMap(Stream::of)
                 .toArray(x -> new Object[currentCapacity]);
-
     }
 
     private void ensureCapacity() {
