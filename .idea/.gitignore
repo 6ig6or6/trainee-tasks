@@ -8,5 +8,6 @@ target/
 /dataSources/
 /dataSources.local.xml
 !pom.xml
+!trainee-tasks.iml
 *.xml
 *.iml
