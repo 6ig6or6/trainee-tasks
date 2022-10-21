@@ -1,5 +1,6 @@
 package org.example.maincollections;
 
+import org.example.maincollections.list.LinkedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

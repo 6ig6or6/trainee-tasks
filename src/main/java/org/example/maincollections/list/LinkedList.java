@@ -1,8 +1,8 @@
-package org.example.maincollections;
+package org.example.maincollections.list;
 
 import java.util.NoSuchElementException;
 
-public class LinkedList<E> {
+public class LinkedList<E> implements List<E> {
     private int size;
     private Node<E> firstNode, lastNode;
 
@@ -99,6 +99,11 @@ public class LinkedList<E> {
         return size;
     }
 
+    @Override
+    public void add(E e) {
+        addLast(e);
+    }
+
 
     @Override
     public String toString() {
@@ -116,7 +121,6 @@ public class LinkedList<E> {
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
-
 
     private static class Node<E> {
         E element;

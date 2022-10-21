@@ -1,9 +1,10 @@
-package org.example.maincollections;
+package org.example.maincollections.list;
 
 import java.util.Arrays;
 
 public class ArrayList<T> {
     private final static int DEFAULT_CAPACITY = 10;
+    private final static int INCREASE_COEFFICIENT = 2;
     private Object[] array;
     private int size;
 
@@ -68,7 +69,7 @@ public class ArrayList<T> {
     }
 
     private void ensureCapacity() {
-        int newIncreasedCapacity = array.length * 2;
+        int newIncreasedCapacity = array.length * INCREASE_COEFFICIENT;
         array = Arrays.copyOf(array, newIncreasedCapacity);
     }
 
