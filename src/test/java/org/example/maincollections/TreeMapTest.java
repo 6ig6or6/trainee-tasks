@@ -1,5 +1,6 @@
 package org.example.maincollections;
 
+import org.example.maincollections.map.Map;
 import org.example.maincollections.map.TreeMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TreeMapTest {
-    TreeMap<String, Integer> map;
+    Map<String, Integer> map;
 
     @BeforeEach
     void init() {

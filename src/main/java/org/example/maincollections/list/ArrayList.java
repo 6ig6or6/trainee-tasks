@@ -2,7 +2,7 @@ package org.example.maincollections.list;
 
 import java.util.Arrays;
 
-public class ArrayList<T> {
+public class ArrayList<T> implements List<T> {
     private final static int DEFAULT_CAPACITY = 10;
     private final static int INCREASE_COEFFICIENT = 2;
     private Object[] array;
@@ -53,6 +53,7 @@ public class ArrayList<T> {
         }
         return -1;
     }
+
     @SuppressWarnings("unchecked")
     public T remove(int index) {
         if (index < 0 || index >= size) {

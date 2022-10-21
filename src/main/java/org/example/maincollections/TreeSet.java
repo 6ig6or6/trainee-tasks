@@ -1,6 +1,6 @@
 package org.example.maincollections;
 
-import java.util.TreeMap;
+import org.example.maincollections.map.TreeMap;
 
 public class TreeSet<K extends Comparable<K>> {
     private TreeMap<K, Object> map;
@@ -19,15 +19,15 @@ public class TreeSet<K extends Comparable<K>> {
     }
 
     public boolean contains(K k) {
-        return map.containsKey(k);
+        return map.contains(k);
     }
 
     public boolean add(K k) {
         return map.put(k, STUB) == null;
     }
 
-    public boolean remove(Object object) {
-        return map.remove(object) == STUB;
+    public boolean remove(K k) {
+        return map.remove(k) == STUB;
     }
 
 }

@@ -137,7 +137,6 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     }
 
     private void addEntryToEmptyMap(K key, V value) {
-        //  compare(key, key);
         root = new Node<>(key, value, null);
         size = 1;
     }
