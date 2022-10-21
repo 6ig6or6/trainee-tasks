@@ -1,12 +1,14 @@
 package org.example.maincollections;
 
+import org.example.maincollections.set.Set;
+import org.example.maincollections.set.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TreeSetTest {
-    TreeSet<Integer> set;
+    Set<Integer> set;
 
     @BeforeEach
     void init() {

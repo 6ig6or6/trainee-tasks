@@ -1,9 +1,9 @@
-package org.example.maincollections;
+package org.example.maincollections.set;
 
 import org.example.maincollections.map.TreeMap;
 
-public class TreeSet<K extends Comparable<K>> {
-    private TreeMap<K, Object> map;
+public class TreeSet<K extends Comparable<K>> implements Set<K> {
+    private final TreeMap<K, Object> map;
     private static final Object STUB = new Object();
 
     public TreeSet() {

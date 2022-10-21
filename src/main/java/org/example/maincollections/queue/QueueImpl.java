@@ -1,9 +1,12 @@
-package org.example.maincollections;
+package org.example.maincollections.queue;
 
-public class Queue<E> {
+import java.util.NoSuchElementException;
+
+public class QueueImpl<E> implements Queue<E> {
     private int size;
     private Node<E> first, last;
 
+    @Override
     public void add(E e) {
         Node<E> node = new Node<>(e);
         if (size == 0) {
@@ -15,10 +18,23 @@ public class Queue<E> {
         size++;
     }
 
-    public E poll() throws Exception {
+    @Override
+    public E poll() {
         if (size == 0) {
-            throw new Exception("Empty queue");
+            return null;
         }
+        return removeAndReturnHead();
+    }
+
+    @Override
+    public E remove() {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
+        return removeAndReturnHead();
+    }
+
+    private E removeAndReturnHead() {
         E result = first.getElement();
         first = first.getNextNode();
         size--;
@@ -28,9 +44,18 @@ public class Queue<E> {
         return result;
     }
 
-    public E peek() throws Exception {
+    @Override
+    public E element() {
         if (size == 0) {
-            throw new Exception("Empty queue");
+            throw new NoSuchElementException();
+        }
+        return first.getElement();
+    }
+
+    @Override
+    public E peek() {
+        if (size == 0) {
+            return null;
         }
         return first.getElement();
     }
@@ -38,6 +63,7 @@ public class Queue<E> {
     public int size() {
         return size;
     }
+
     @Override
     public String toString() {
         if (first == null) {

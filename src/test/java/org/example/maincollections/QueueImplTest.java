@@ -1,16 +1,19 @@
 package org.example.maincollections;
 
+import org.example.maincollections.queue.QueueImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class QueueTest {
-    Queue<Object> queue;
+class QueueImplTest {
+    QueueImpl<Object> queue;
 
     @BeforeEach
     void init() {
-        queue = new Queue<>();
+        queue = new QueueImpl<>();
     }
 
     @Test
@@ -21,7 +24,7 @@ class QueueTest {
     }
 
     @Test
-    void poll() throws Exception {
+    void poll() {
         queue.add(1);
         queue.add(2);
         queue.add(9002);
@@ -32,8 +35,9 @@ class QueueTest {
         queue.poll();
         assertEquals(4, queue.size());
     }
+
     @Test
-    void peek() throws Exception {
+    void peek() {
         queue.add("new string 3");
         queue.add("new string 2");
         queue.add("new string 1");
@@ -42,13 +46,19 @@ class QueueTest {
         String s = (String) queue.peek();
         assertEquals("new string 3", s);
     }
+
     @Test
     void pollOnEmptyQueue() {
-        assertThrows(Exception.class, () -> queue.poll());
-        assertThrows(Exception.class, () -> queue.peek());
+        assertNull(queue.poll());
     }
+
     @Test
-    void size() throws Exception {
+    void peekOnEmptyQueue() {
+        assertNull(queue.peek());
+    }
+
+    @Test
+    void size() {
         queue.add(1);
         queue.add(36);
         queue.poll();
@@ -56,8 +66,37 @@ class QueueTest {
         queue.add(90);
         assertEquals(2, queue.size());
     }
+
     @Test
-    void toStringTest() throws Exception {
+    void remove() {
+        queue.add(1);
+        queue.add(2);
+        Integer val = (Integer) queue.remove();
+        assertEquals(1, val);
+        assertEquals(1, queue.size());
+    }
+
+    @Test
+    void element() {
+        queue.add(900);
+        queue.add(1000);
+        Integer head = (Integer) queue.element();
+        assertEquals(900, head);
+        assertEquals(2, queue.size());
+    }
+
+    @Test
+    void removeOnEmptyQueue() {
+        assertThrows(NoSuchElementException.class, () -> queue.remove());
+    }
+
+    @Test
+    void elementOmEmptyQueue() {
+        assertThrows(NoSuchElementException.class, () -> queue.element());
+    }
+
+    @Test
+    void toStringTest() {
         queue.add(1);
         queue.add(36);
         queue.poll();

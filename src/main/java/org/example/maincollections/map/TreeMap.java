@@ -43,9 +43,11 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         do {
             parent = t;
             comparableValue = k.compareTo(t.key);
-            if (comparableValue < 0) t = t.left;
-            else if (comparableValue > 0) t = t.right;
-            else {
+            if (comparableValue < 0) {
+                t = t.left;
+            } else if (comparableValue > 0) {
+                t = t.right;
+            } else {
                 V oldValue = t.value;
                 t.value = value;
 
@@ -72,9 +74,13 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         Node<K, V> p = root;
         while (p != null) {
             int comparableValue = k.compareTo(p.key);
-            if (comparableValue < 0) p = p.left;
-            else if (comparableValue > 0) p = p.right;
-            else return p;
+            if (comparableValue < 0) {
+                p = p.left;
+            } else if (comparableValue > 0) {
+                p = p.right;
+            } else {
+                return p;
+            }
         }
         return null;
     }
@@ -145,11 +151,17 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         if (node != null) {
             Node<K, V> l = node.left;
             node.left = l.right;
-            if (l.right != null) l.right.parent = node;
+            if (l.right != null) {
+                l.right.parent = node;
+            }
             l.parent = node.parent;
-            if (node.parent == null) root = l;
-            else if (node.parent.right == node) node.parent.right = l;
-            else node.parent.left = l;
+            if (node.parent == null) {
+                root = l;
+            } else if (node.parent.right == node) {
+                node.parent.right = l;
+            } else {
+                node.parent.left = l;
+            }
             l.right = node;
             node.parent = l;
         }
@@ -159,11 +171,17 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         if (node != null) {
             Node<K, V> r = node.right;
             node.right = r.left;
-            if (r.left != null) r.left.parent = node;
+            if (r.left != null) {
+                r.left.parent = node;
+            }
             r.parent = node.parent;
-            if (node.parent == null) root = r;
-            else if (node.parent.left == node) node.parent.left = r;
-            else node.parent.right = r;
+            if (node.parent == null) {
+                root = r;
+            } else if (node.parent.left == node) {
+                node.parent.left = r;
+            } else {
+                node.parent.right = r;
+            }
             r.left = node;
             node.parent = r;
         }

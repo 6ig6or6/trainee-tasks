@@ -18,6 +18,24 @@ public class LinkedList<E> implements List<E> {
         return false;
     }
 
+    @Override
+    public E get(int index) {
+        //TODO
+        return null;
+    }
+
+    @Override
+    public int indexOf(E e) {
+        //TODO
+        return 0;
+    }
+
+    @Override
+    public E remove(int index) {
+        //TODO
+        return null;
+    }
+
     public boolean removeFirstOccurrence(E e) {
         Node<E> currentNode = firstNode;
         while (currentNode != null) {
@@ -102,6 +120,10 @@ public class LinkedList<E> implements List<E> {
     @Override
     public void add(E e) {
         addLast(e);
+    }
+    @Override
+    public void add(int index, E e) {
+        //TODO
     }
 
 
