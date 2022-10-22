@@ -23,7 +23,9 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     @Override
     public V remove(K key) {
         Node<K, V> p = getNode(key);
-        if (p == null) return null;
+        if (p == null) {
+            return null;
+        }
         V oldValue = p.value;
         deleteNode(p);
         return oldValue;
@@ -114,7 +116,10 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         } else if (p.parent == null) { // return if we are the only node.
             root = null;
         } else { // No children
-            useItselfAsPhantomReplacementAndUnlink(p);
+            if (p.color == BLACK) {
+                fixAfterDeletion(p); //use itself as a phantom replacement
+            }
+            unlinkNodes(p);
         }
     }
 
@@ -135,10 +140,7 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
     }
 
-    private void useItselfAsPhantomReplacementAndUnlink(Node<K, V> p) {
-        if (p.color == BLACK) {
-            fixAfterDeletion(p);
-        }
+    private void unlinkNodes(Node<K, V> p) {
         if (p.parent != null) {
             if (p == p.parent.left) {
                 p.parent.left = null;
