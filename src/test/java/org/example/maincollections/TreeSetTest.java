@@ -16,7 +16,7 @@ class TreeSetTest {
     }
 
     @Test
-    void size() {
+    void whenAddingFewSameObjectsThenCorrectSize() {
         set.add(100);
         set.add(200);
         set.add(100);
@@ -24,14 +24,14 @@ class TreeSetTest {
     }
 
     @Test
-    void isEmpty() {
+    void whenEmptySetSizeIsZeroThenTrue() {
         assertTrue(set.isEmpty());
         set.add(10);
         assertFalse(set.isEmpty());
     }
 
     @Test
-    void contains() {
+    void whenSetContainsNeededValueThenTrue() {
         set.add(10000);
         set.add(0);
         assertTrue(set.contains(10000));
@@ -39,7 +39,7 @@ class TreeSetTest {
     }
 
     @Test
-    void remove() {
+    void whenValueWasRemovedThenFalseAfterContains() {
         set.add(1);
         set.add(20);
         set.add(900);

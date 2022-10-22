@@ -12,19 +12,19 @@ class TreeMapTest {
     Map<String, Integer> map;
 
     @BeforeEach
-    void init() {
+    void initialize() {
         map = new TreeMap<>();
     }
 
     @Test
-    void get() {
+    void whenGetWithContainingObjectThenSuccess() {
         map.put("Line", 2);
         map.put("Second Line", 3);
         assertEquals(2, map.get("Line"));
     }
 
     @Test
-    void size() {
+    void whenSizeAfterTwoUniqueInsertionsOnEmptyMapThenCorrectSize() {
         assertEquals(0, map.size());
         map.put("Line", 2);
         map.put("Line", 3);
@@ -33,30 +33,39 @@ class TreeMapTest {
     }
 
     @Test
-    void put() {
+    void whenGetAfterPutting4SameObjectThenCorrectValue() {
         map.put("Line", 1);
         map.put("Line", 2);
         map.put("Line", 3);
-        map.put("Line", 4);
-        assertEquals(4, map.get("Line"));
+        map.put("Line", 5);
+        assertEquals(5, map.get("Line"));
     }
 
     @Test
-    void remove() {
+    void whenRemovingOnEmptyMapThenNull() {
         assertNull(map.remove("String"));
+    }
+    @Test
+    void whenRemovingElementWhichMapContainsThenCorrectValue() {
         map.put("New String", 1000);
         assertEquals(1000, map.remove("New String"));
     }
 
     @Test
-    void contains() {
+    void whenMapContainsNeededKeyThenTrue() {
         map.put("First String", 1);
         map.put("Second String", 1);
         assertTrue(map.contains("First String"));
+
+    }
+    @Test
+    void whenMapDoesntContainNeededKeyThenFalse() {
+        map.put("First String", 1);
+        map.put("Second String", 1);
         assertFalse(map.contains("Third string"));
     }
     @Test
-    void isEmpty() {
+    void whenEmptyMapSizeIsZeroThenTrue() {
         assertTrue(map.isEmpty());
         map.put("String", 1);
         assertFalse(map.isEmpty());

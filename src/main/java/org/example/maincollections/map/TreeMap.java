@@ -1,6 +1,7 @@
 package org.example.maincollections.map;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     private Node<K, V> root;
@@ -22,8 +23,7 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     @Override
     public V remove(K key) {
         Node<K, V> p = getNode(key);
-        if (p == null)
-            return null;
+        if (p == null) return null;
         V oldValue = p.value;
         deleteNode(p);
         return oldValue;
@@ -39,10 +39,9 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         int comparableValue;
         Node<K, V> parent;
         Objects.requireNonNull(key);
-        Comparable<? super K> k = key;
         do {
             parent = t;
-            comparableValue = k.compareTo(t.key);
+            comparableValue = key.compareTo(t.key);
             if (comparableValue < 0) {
                 t = t.left;
             } else if (comparableValue > 0) {
@@ -54,7 +53,7 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
                 return oldValue;
             }
         } while (t != null);
-        addEntry(key, value, parent, comparableValue < 0);
+        addNode(key, value, parent, comparableValue < 0);
         return null;
     }
 
@@ -85,7 +84,7 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         return null;
     }
 
-    private void addEntry(K key, V value, Node<K, V> parent, boolean addToLeft) {
+    private void addNode(K key, V value, Node<K, V> parent, boolean addToLeft) {
         Node<K, V> e = new Node<>(key, value, parent);
         if (addToLeft) {
             parent.left = e;
@@ -96,49 +95,57 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         size++;
     }
 
+    private final Predicate<Node<K, V>> isChildElementsNotNull = x -> x.left != null && x.right != null;
+
     private void deleteNode(Node<K, V> p) {
         size--;
         // If strictly internal, copy successor's element to p and then make p
         // point to successor.
-        if (p.left != null && p.right != null) {
+        if (isChildElementsNotNull.test(p)) {
             Node<K, V> s = Node.successor(p);
             p.key = s.key;
             p.value = s.value;
             p = s;
         } // p has 2 children
-
         // Start fixup at replacement node, if it exists.
         Node<K, V> replacement = (p.left != null ? p.left : p.right);
-
         if (replacement != null) {
-            // Link replacement to parent
-            replacement.parent = p.parent;
-            if (p.parent == null)
-                root = replacement;
-            else if (p == p.parent.left)
-                p.parent.left = replacement;
-            else
-                p.parent.right = replacement;
-
-            // Null out links so they are OK to use by fixAfterDeletion.
-            p.left = p.right = p.parent = null;
-
-            // Fix replacement
-            if (p.color == BLACK)
-                fixAfterDeletion(replacement);
+            linkReplacementToParent(p, replacement);
         } else if (p.parent == null) { // return if we are the only node.
             root = null;
-        } else { //  No children. Use self as phantom replacement and unlink.
-            if (p.color == BLACK)
-                fixAfterDeletion(p);
+        } else { // No children
+            useItselfAsPhantomReplacementAndUnlink(p);
+        }
+    }
 
-            if (p.parent != null) {
-                if (p == p.parent.left)
-                    p.parent.left = null;
-                else if (p == p.parent.right)
-                    p.parent.right = null;
-                p.parent = null;
+    private void linkReplacementToParent(Node<K, V> p, Node<K, V> replacement) {
+        replacement.parent = p.parent;
+        if (p.parent == null) {
+            root = replacement;
+        } else if (p == p.parent.left) {
+            p.parent.left = replacement;
+        } else {
+            p.parent.right = replacement;
+        }
+        // Null out links so they are OK to use by fixAfterDeletion.
+        p.left = p.right = p.parent = null;
+        // Fix replacement
+        if (p.color == BLACK) {
+            fixAfterDeletion(replacement);
+        }
+    }
+
+    private void useItselfAsPhantomReplacementAndUnlink(Node<K, V> p) {
+        if (p.color == BLACK) {
+            fixAfterDeletion(p);
+        }
+        if (p.parent != null) {
+            if (p == p.parent.left) {
+                p.parent.left = null;
+            } else if (p == p.parent.right) {
+                p.parent.right = null;
             }
+            p.parent = null;
         }
     }
 
@@ -187,105 +194,123 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
     }
 
+    private final Predicate<Node<K, V>> isColorRed = n -> colorOf(n) == RED;
+    private final Predicate<Node<K, V>> isColorBlack = n -> colorOf(n) == BLACK;
+
     private void fixAfterInsertion(Node<K, V> x) {
         x.color = RED;
         while (x != null && x != root && x.parent.color == RED) {
             if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
-                Node<K, V> y = rightOf(parentOf(parentOf(x)));
-                if (colorOf(y) == RED) {
-                    setColor(parentOf(x), BLACK);
-                    setColor(y, BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    x = parentOf(parentOf(x));
-                } else {
-                    if (x == rightOf(parentOf(x))) {
-                        x = parentOf(x);
-                        rotateLeft(x);
-                    }
-                    setColor(parentOf(x), BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    rotateRight(parentOf(parentOf(x)));
-                }
+                x = fixRightChildAfterInsertion(x);
             } else {
-                Node<K, V> y = leftOf(parentOf(parentOf(x)));
-                if (colorOf(y) == RED) {
-                    setColor(parentOf(x), BLACK);
-                    setColor(y, BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    x = parentOf(parentOf(x));
-                } else {
-                    if (x == leftOf(parentOf(x))) {
-                        x = parentOf(x);
-                        rotateRight(x);
-                    }
-                    setColor(parentOf(x), BLACK);
-                    setColor(parentOf(parentOf(x)), RED);
-                    rotateLeft(parentOf(parentOf(x)));
-                }
+                x = fixLeftChildAfterInsertion(x);
             }
         }
         root.color = BLACK;
     }
 
-    private void fixAfterDeletion(Node<K, V> x) {
-        while (x != root && colorOf(x) == BLACK) {
+    private Node<K, V> fixRightChildAfterInsertion(Node<K, V> x) {
+        Node<K, V> y = rightOf(parentOf(parentOf(x)));
+        if (isColorRed.test(y)) {
+            setColor(parentOf(x), BLACK);
+            setColor(y, BLACK);
+            setColor(parentOf(parentOf(x)), RED);
+            x = parentOf(parentOf(x));
+        } else {
+            if (x == rightOf(parentOf(x))) {
+                x = parentOf(x);
+                rotateLeft(x);
+            }
+            setColor(parentOf(x), BLACK);
+            setColor(parentOf(parentOf(x)), RED);
+            rotateRight(parentOf(parentOf(x)));
+        }
+        return x;
+    }
+
+    private Node<K, V> fixLeftChildAfterInsertion(Node<K, V> x) {
+        Node<K, V> y = leftOf(parentOf(parentOf(x)));
+        if (isColorRed.test(y)) {
+            setColor(parentOf(x), BLACK);
+            setColor(y, BLACK);
+            setColor(parentOf(parentOf(x)), RED);
+            x = parentOf(parentOf(x));
+        } else {
             if (x == leftOf(parentOf(x))) {
-                Node<K, V> sib = rightOf(parentOf(x));
+                x = parentOf(x);
+                rotateRight(x);
+            }
+            setColor(parentOf(x), BLACK);
+            setColor(parentOf(parentOf(x)), RED);
+            rotateLeft(parentOf(parentOf(x)));
+        }
+        return x;
+    }
 
-                if (colorOf(sib) == RED) {
-                    setColor(sib, BLACK);
-                    setColor(parentOf(x), RED);
-                    rotateLeft(parentOf(x));
-                    sib = rightOf(parentOf(x));
-                }
-
-                if (colorOf(leftOf(sib)) == BLACK &&
-                        colorOf(rightOf(sib)) == BLACK) {
-                    setColor(sib, RED);
-                    x = parentOf(x);
-                } else {
-                    if (colorOf(rightOf(sib)) == BLACK) {
-                        setColor(leftOf(sib), BLACK);
-                        setColor(sib, RED);
-                        rotateRight(sib);
-                        sib = rightOf(parentOf(x));
-                    }
-                    setColor(sib, colorOf(parentOf(x)));
-                    setColor(parentOf(x), BLACK);
-                    setColor(rightOf(sib), BLACK);
-                    rotateLeft(parentOf(x));
-                    x = root;
-                }
+    private void fixAfterDeletion(Node<K, V> x) {
+        while (x != root && isColorBlack.test(x)) {
+            if (x == leftOf(parentOf(x))) {
+                x = replaceRightParentsChildForDeletion(x);
             } else { // symmetric
-                Node<K, V> sib = leftOf(parentOf(x));
-
-                if (colorOf(sib) == RED) {
-                    setColor(sib, BLACK);
-                    setColor(parentOf(x), RED);
-                    rotateRight(parentOf(x));
-                    sib = leftOf(parentOf(x));
-                }
-
-                if (colorOf(rightOf(sib)) == BLACK &&
-                        colorOf(leftOf(sib)) == BLACK) {
-                    setColor(sib, RED);
-                    x = parentOf(x);
-                } else {
-                    if (colorOf(leftOf(sib)) == BLACK) {
-                        setColor(rightOf(sib), BLACK);
-                        setColor(sib, RED);
-                        rotateLeft(sib);
-                        sib = leftOf(parentOf(x));
-                    }
-                    setColor(sib, colorOf(parentOf(x)));
-                    setColor(parentOf(x), BLACK);
-                    setColor(leftOf(sib), BLACK);
-                    rotateRight(parentOf(x));
-                    x = root;
-                }
+                x = replaceLeftParentsChildForDeletion(x);
             }
         }
         setColor(x, BLACK);
+    }
+
+    private Node<K, V> replaceRightParentsChildForDeletion(Node<K, V> x) {
+        Node<K, V> sib = rightOf(parentOf(x));
+        if (isColorRed.test(sib)) {
+            setColor(sib, BLACK);
+            setColor(parentOf(x), RED);
+            rotateLeft(parentOf(x));
+            sib = rightOf(parentOf(x));
+        }
+        if (isColorBlack.test(leftOf(sib)) && isColorBlack.test(rightOf(sib))) {
+            setColor(sib, RED);
+            x = parentOf(x);
+        } else {
+            if (isColorBlack.test(rightOf(sib))) {
+                setColor(leftOf(sib), BLACK);
+                setColor(sib, RED);
+                rotateRight(sib);
+                sib = rightOf(parentOf(x));
+            }
+            setColor(sib, colorOf(parentOf(x)));
+            setColor(parentOf(x), BLACK);
+            setColor(rightOf(sib), BLACK);
+            rotateLeft(parentOf(x));
+            x = root;
+        }
+        return x;
+    }
+
+    private Node<K, V> replaceLeftParentsChildForDeletion(Node<K, V> x) {
+        Node<K, V> sib = leftOf(parentOf(x));
+        if (isColorRed.test(sib)) {
+            setColor(sib, BLACK);
+            setColor(parentOf(x), RED);
+            rotateRight(parentOf(x));
+            sib = leftOf(parentOf(x));
+        }
+
+        if (isColorBlack.test(leftOf(sib)) && isColorBlack.test(rightOf(sib))) {
+            setColor(sib, RED);
+            x = parentOf(x);
+        } else {
+            if (isColorBlack.test(leftOf(sib))) {
+                setColor(rightOf(sib), BLACK);
+                setColor(sib, RED);
+                rotateLeft(sib);
+                sib = leftOf(parentOf(x));
+            }
+            setColor(sib, colorOf(parentOf(x)));
+            setColor(parentOf(x), BLACK);
+            setColor(leftOf(sib), BLACK);
+            rotateRight(parentOf(x));
+            x = root;
+        }
+        return x;
     }
 
     private static <K, V> boolean colorOf(Node<K, V> p) {
@@ -297,8 +322,9 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
     }
 
     private static <K, V> void setColor(Node<K, V> p, boolean color) {
-        if (p != null)
+        if (p != null) {
             p.color = color;
+        }
     }
 
     private static <K, V> Node<K, V> leftOf(Node<K, V> p) {
@@ -324,12 +350,13 @@ public class TreeMap<K extends Comparable<K>, V> implements Map<K, V> {
         }
 
         static <K, V> Node<K, V> successor(Node<K, V> t) {
-            if (t == null)
+            if (t == null) {
                 return null;
-            else if (t.right != null) {
+            } else if (t.right != null) {
                 Node<K, V> p = t.right;
-                while (p.left != null)
+                while (p.left != null) {
                     p = p.left;
+                }
                 return p;
             } else {
                 Node<K, V> p = t.parent;

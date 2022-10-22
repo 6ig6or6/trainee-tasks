@@ -13,7 +13,7 @@ class LinkedListTest {
         list = new LinkedList<>();
     }
     @Test
-    void contains() {
+    void whenListContainsProvidedObjectsThenTrue() {
         list.addLast(100);
         list.addLast(200);
         list.addFirst(100000);
@@ -24,7 +24,7 @@ class LinkedListTest {
     }
 
     @Test
-    void getFirst() {
+    void whenGettingFirstObjectThenCorrectValue() {
         list.addFirst(10);
         list.addLast(100);
         list.addFirst(1);
@@ -32,19 +32,19 @@ class LinkedListTest {
     }
 
     @Test
-    void getLast() {
+    void whenGettingLastObjectThenCorrectValue() {
         list.addLast(5);
         list.addLast(128);
         assertEquals(128, list.getLast());
     }
     @Test
-    void getByIndex() {
+    void whenGettingObjectByIndexThenCorrectObject() {
        addStrings();
        assertEquals("object 3", list.get(2));
     }
 
     @Test
-    void addLast() {
+    void whenAdding2ObjectsToEndThenCorrectObjectInTheEnd() {
         list.addLast(5);
         list.addLast(7);
         assertEquals(list.getLast(), 7);
@@ -52,7 +52,7 @@ class LinkedListTest {
     }
 
     @Test
-    void addFirst() {
+    void whenAdding2ObjectsToBeginningThenCorrectObjectInTheBeginning() {
         list.addFirst(5);
         list.addLast(7);
         list.addFirst(1);
@@ -61,14 +61,14 @@ class LinkedListTest {
         assertEquals(1, list.getFirst());
     }
     @Test
-    void addByIndex() {
+    void whenAddingObjectByIndexThenCorrectListSequence() {
         addStrings();
         list.add(1, "new String");
         assertEquals("new String", list.get(1));
     }
 
     @Test
-    void removeFirstOccurrence() {
+    void whenRemovingFirstOccurrenceWhenListContainsValueThenTrue() {
         list.addLast(100);
         list.addFirst(900);
         list.addLast(898990);
@@ -82,7 +82,7 @@ class LinkedListTest {
     }
 
     @Test
-    void removeAll() {
+    void whenRemovingAllOccurrencesThenCorrectListSequence() {
         list.addLast("object 1");
         list.addFirst("object 1");
         list.addLast("object 2");
@@ -91,20 +91,20 @@ class LinkedListTest {
         assertEquals(1, list.size());
     }
     @Test
-    void removeByIndex() {
+    void whenRemovingByIndexThenCorrectListSize() {
         addStrings();
         list.remove(1);
         assertEquals(2, list.size());
     }
 
     @Test
-    void removeAllOnEmptyList() {
+    void whenRemovingAllOnEmptyListThenCorrectListSize() {
         list.removeAllOccurrences("object");
         assertEquals(0, list.size());
     }
 
     @Test
-    void size() {
+    void whenAddingAndRemovingObjectsThenCorrectListSize() {
         list.addLast("object 1");
         list.addLast("object 2");
         list.addFirst("object 3");
@@ -115,11 +115,11 @@ class LinkedListTest {
     }
 
     @Test
-    void sizeOfEmptyList() {
+    void whenSizeOnEmptyListThenCorrectSize() {
         assertEquals(0, list.size());
     }
     @Test
-    void indexOf() {
+    void whenIndexOfProvidedObjectThenCorrectIndex() {
         addStrings();
         assertEquals(0, list.indexOf("object 1"));
         assertEquals(2, list.indexOf("object 3"));
@@ -127,7 +127,7 @@ class LinkedListTest {
     }
 
     @Test
-    void listToString() {
+    void whenListToStringThenCorrectString() {
         list.addLast(3);
         list.addLast(4);
         list.addFirst(1);

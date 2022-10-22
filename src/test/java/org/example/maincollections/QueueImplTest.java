@@ -17,14 +17,14 @@ class QueueImplTest {
     }
 
     @Test
-    void add() {
+    void whenAdding2ObjectsThenCorrectQueueSize() {
         queue.add(new Object());
         queue.add(new Object());
         assertEquals(2, queue.size());
     }
 
     @Test
-    void poll() {
+    void whenAddingAndPollingObjectsThenCorrectQueueSize() {
         queue.add(1);
         queue.add(2);
         queue.add(9002);
@@ -37,7 +37,7 @@ class QueueImplTest {
     }
 
     @Test
-    void peek() {
+    void whenAddingAndPeekingObjectsThenCorrectQueueSizeAndStructure() {
         queue.add("new string 3");
         queue.add("new string 2");
         queue.add("new string 1");
@@ -48,17 +48,17 @@ class QueueImplTest {
     }
 
     @Test
-    void pollOnEmptyQueue() {
+    void whenPollingOnEmptyQueueThenNull() {
         assertNull(queue.poll());
     }
 
     @Test
-    void peekOnEmptyQueue() {
+    void whenPeekingOnEmptyQueueThenNull() {
         assertNull(queue.peek());
     }
 
     @Test
-    void size() {
+    void whenPollPeekAndAddThenCorrectSize() {
         queue.add(1);
         queue.add(36);
         queue.poll();
@@ -68,7 +68,7 @@ class QueueImplTest {
     }
 
     @Test
-    void remove() {
+    void whenRemovingObjectsThenCorrectRemovedObjectAndQueueSize() {
         queue.add(1);
         queue.add(2);
         Integer val = (Integer) queue.remove();
@@ -77,7 +77,7 @@ class QueueImplTest {
     }
 
     @Test
-    void element() {
+    void whenElementObjectsThenCorrectRemovedObjectAndQueueSize() {
         queue.add(900);
         queue.add(1000);
         Integer head = (Integer) queue.element();
@@ -86,17 +86,17 @@ class QueueImplTest {
     }
 
     @Test
-    void removeOnEmptyQueue() {
+    void whenRemoveOnEmptyQueueThenThrows() {
         assertThrows(NoSuchElementException.class, () -> queue.remove());
     }
 
     @Test
-    void elementOmEmptyQueue() {
+    void whenElementOnEmptyQueueThenThrows() {
         assertThrows(NoSuchElementException.class, () -> queue.element());
     }
 
     @Test
-    void toStringTest() {
+    void whenToStringOnQueueThenCorrectString() {
         queue.add(1);
         queue.add(36);
         queue.poll();

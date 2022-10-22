@@ -15,14 +15,14 @@ class ArrayListTest {
     }
 
     @Test
-    void add() {
+    void whenSizeOnMapWhichContains2ObjectsThenCorrectSize() {
         list.add(100);
         list.add(153);
         assertEquals(2, list.size());
     }
 
     @Test
-    void addByIndex() {
+    void whenAddingValueByIndexThenCorrectArraySequence() {
         addIntegers(list);
         list.add(4, 100);
         assertEquals(100, list.get(4));
@@ -30,7 +30,7 @@ class ArrayListTest {
     }
 
     @Test
-    void get() {
+    void whenAddingObjectsThenCorrectValuesOnNeededPositions() {
         list.add(100);
         list.add(153);
         list.add(9090);
@@ -39,14 +39,14 @@ class ArrayListTest {
     }
 
     @Test
-    void indexOf() {
+    void whenGettingObjectsByIndexesThenCorrectValues() {
         addStrings(list);
         assertEquals(0, list.indexOf("String 1"));
         assertEquals(2, list.indexOf("String 6"));
     }
 
     @Test
-    void removeByIndex() {
+    void whenRemovingObjectsThenCorrectArraySize() {
         addStrings(list);
         list.remove(0);
         list.remove(0);
@@ -55,14 +55,14 @@ class ArrayListTest {
     }
 
     @Test
-    void contains() {
+    void whenListContainsProvidedObjectThenTrue() {
         addStrings(list);
         assertTrue(list.contains("String 5"));
         assertFalse(list.contains("wrong string"));
     }
 
     @Test
-    void removeFirstOccurrence() {
+    void whenRemovingFirstOccurrenceListContainsSecondSameObject() {
         addStrings(list);
         list.add("String 1");
         list.removeFirstOccurrence("String 1");
