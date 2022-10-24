@@ -7,7 +7,7 @@ public class QuickSorter<T extends Comparable<T>> implements ArraySorter<T> {
         return arr;
     }
 
-    public void quickSort(T[] arr, int begin, int end) {
+    private void quickSort(T[] arr, int begin, int end) {
         if (begin < end) {
             int partitionIndex = partition(arr, begin, end);
 
