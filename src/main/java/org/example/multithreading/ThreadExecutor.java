@@ -1,5 +1,9 @@
 package org.example.multithreading;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -9,19 +13,20 @@ import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
 public class ThreadExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
     public static void main(String[] args) {
         executeThreads();
         CommonStorage.printMapData();
         CommonStorage.refreshData();
-        System.out.println("______________________________");
+        logger.info("______________________________");
         executeRunnable();
         CommonStorage.printMapData();
         CommonStorage.refreshData();
-        System.out.println("______________________________");
+        logger.info("______________________________");
         executeCallableWithSingleThreadExecutor();
         CommonStorage.printMapData();
         CommonStorage.refreshData();
-        System.out.println("______________________________");
+        logger.info("______________________________");
         executeCallableWithFixedThreadExecutor();
         CommonStorage.printMapData();
     }
@@ -52,7 +57,7 @@ public class ThreadExecutor {
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
-        }).forEach(System.out::println);
+        }).forEach(logger::info);
     }
 
     private static void executeCallableWithFixedThreadExecutor() {

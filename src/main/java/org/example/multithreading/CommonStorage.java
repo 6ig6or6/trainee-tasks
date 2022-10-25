@@ -3,6 +3,8 @@ package org.example.multithreading;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 import java.util.HashMap;
@@ -11,7 +13,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CommonStorage {
-    private static Map<String, String> map = new HashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(CommonStorage.class);
+    private static Map<String, String> threadInfoByThreadName = new HashMap<>();
     private static final Lock LOCK = new ReentrantLock();
 
     public static void saveThreadInfo() {
@@ -25,10 +28,11 @@ public class CommonStorage {
                 //to see difference between timeBefore and timeAfter
                 Thread.sleep((long) (Math.random() * 10));
             } catch (InterruptedException e) {
+                logger.error("An exception occurred ", e);
                 throw new RuntimeException(e);
             }
             threadInfo.setTimeAfter(LocalTime.now());
-            map.put(thread.getName(), threadInfo.toString());
+            threadInfoByThreadName.put(thread.getName(), threadInfo.toString());
         } finally {
             LOCK.unlock();
         }
@@ -38,13 +42,14 @@ public class CommonStorage {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
+            logger.error("An exception occurred ", e);
             throw new RuntimeException(e);
         }
-        map.forEach((key, value) -> System.out.println(key + " " + value));
+        threadInfoByThreadName.forEach((key, value) -> logger.info(key + " " + value));
     }
 
     public static void refreshData() {
-        map = new HashMap<>();
+        threadInfoByThreadName = new HashMap<>();
         ThreadInfo.resetCount();
     }
 
