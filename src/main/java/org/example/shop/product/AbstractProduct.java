@@ -1,17 +1,23 @@
 package org.example.shop.product;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.example.shop.product.currency.Currency;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@RequiredArgsConstructor
 @ToString
-public abstract class AbstractProduct {
+@EqualsAndHashCode
+public abstract class AbstractProduct implements Serializable {
+    @NonNull
     protected String name;
+    @NonNull
     protected double price;
-    protected boolean isEdible;
-
+    @NonNull
+    protected Currency purchasingCurrency;
+    protected LocalDate expirationDate;
+    protected int numberOfStorageDays;
 }

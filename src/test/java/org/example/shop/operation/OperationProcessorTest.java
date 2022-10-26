@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-
 class OperationProcessorTest {
     private OperationProcessor operationProcessor;
     private Bucket bucket;
@@ -19,7 +18,7 @@ class OperationProcessorTest {
     @Test
     void whenShowProductsInBucketOperationThenCorrectMethodInvocation() {
         operationProcessor.chooseOperation("3");
-        Mockito.verify(bucket, Mockito.times(1)).printBucketContent();
+        Mockito.verify(bucket, Mockito.times(1)).printContent();
     }
 
     @Test

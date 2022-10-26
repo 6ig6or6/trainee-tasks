@@ -1,4 +1,4 @@
-package org.example.shop.util;
+package org.example.shop;
 
 import org.example.shop.product.ChocolateBar;
 import org.example.shop.product.Juice;
@@ -9,7 +9,6 @@ public class TestsHelper {
     public static Juice createJuice() {
         return Juice.builder()
                 .name("Orange juice")
-                .isEdible(true)
                 .price(20)
                 .volume(0.9).build();
     }
@@ -17,7 +16,6 @@ public class TestsHelper {
     public static ChocolateBar createChocolate() {
         return ChocolateBar.builder()
                 .name("Milka")
-                .isEdible(true)
                 .price(25)
                 .isMilkChocolate(true)
                 .build();
@@ -26,7 +24,6 @@ public class TestsHelper {
     public static Screwdriver createScrewdriver() {
         return Screwdriver.builder()
                 .name("Wooden screwdriver")
-                .isEdible(false)
                 .price(5)
                 .material("wood")
                 .build();
@@ -35,7 +32,6 @@ public class TestsHelper {
     public static Smartphone createSmartphone() {
         return Smartphone.builder()
                 .name("Smartphone Google")
-                .isEdible(false)
                 .price(1000)
                 .model("pixel 6")
                 .memoryCapacity(128)

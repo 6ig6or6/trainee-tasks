@@ -2,31 +2,37 @@ package org.example.shop;
 
 import org.example.shop.product.AbstractProduct;
 import org.example.shop.util.ConsoleHelper;
+import org.example.shop.util.PriceCounter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Bucket {
-    private final List<AbstractProduct> productsInBucket;
+public class Bucket implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+    private final List<AbstractProduct> products;
 
     public Bucket() {
-        this.productsInBucket = new ArrayList<>();
+        this.products = new ArrayList<>();
     }
 
-    public void printBucketContent() {
-        if (productsInBucket.isEmpty()) {
+    public void printContent() {
+        if (products.isEmpty()) {
             ConsoleHelper.printLine("The bucket is empty");
         } else {
+            ConsoleHelper.printLine("The bucket contains:");
             AtomicInteger position = new AtomicInteger();
-            productsInBucket
+            products
                     .forEach(x -> ConsoleHelper.printLine(position.incrementAndGet() + " " + x));
         }
     }
 
     public void deleteProduct(int pos) {
-        AbstractProduct abstractProduct = productsInBucket.get(pos);
-        if (!productsInBucket.remove(abstractProduct)) {
+        AbstractProduct product = products.get(pos);
+        if (!products.remove(product)) {
             ConsoleHelper.printLine("Bucket doesn't contain this product");
         } else {
             ConsoleHelper.printLine("Product was successfully removed");
@@ -34,15 +40,24 @@ public class Bucket {
     }
 
     public void addProduct(AbstractProduct abstractProduct) {
-        productsInBucket.add(abstractProduct);
+        PriceCounter.recountPrice(abstractProduct);
+        products.add(abstractProduct);
         ConsoleHelper.printLine("Product was successfully added");
     }
 
     public void clear() {
-        productsInBucket.clear();
+        products.clear();
+        ConsoleHelper.printLine("The bucket is empty now");
     }
 
-    public List<AbstractProduct> getProductsInBucket() {
-        return productsInBucket;
+    public double getTotalSum() {
+        return products
+                .stream()
+                .mapToDouble(AbstractProduct::getPrice)
+                .sum();
+    }
+
+    public List<AbstractProduct> getProducts() {
+        return products;
     }
 }

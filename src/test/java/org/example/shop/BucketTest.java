@@ -1,6 +1,5 @@
 package org.example.shop;
 
-import org.example.shop.util.TestsHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,26 +15,31 @@ class BucketTest {
     @Test
     void whenAddingProductsThenCorrectBucketSize() {
         addProducts();
-        assertEquals(3, bucket.getProductsInBucket().size());
+        assertEquals(3, bucket.getProducts().size());
     }
     @Test
     void whenAddingAndDeletingProductsThenCorrectBucketSize() {
         addProducts();
         bucket.deleteProduct(1);
-        assertEquals(2, bucket.getProductsInBucket().size());
+        assertEquals(2, bucket.getProducts().size());
     }
     @Test
     void whenClearBucketThenBucketIsEmpty() {
         addProducts();
         bucket.clear();
-        assertTrue(bucket.getProductsInBucket().isEmpty());
+        assertTrue(bucket.getProducts().isEmpty());
     }
     @Test
     void whenDeletingProductThenCorrectProductIsDeleted() {
         addProducts();
         bucket.deleteProduct(0);
-        assertEquals(2, bucket.getProductsInBucket().size());
-        assertFalse(bucket.getProductsInBucket().contains(TestsHelper.createChocolate()));
+        assertEquals(2, bucket.getProducts().size());
+        assertFalse(bucket.getProducts().contains(TestsHelper.createChocolate()));
+    }
+    @Test
+    void whenAddingProductsThenCorrectBucketTotalSumAfterRecounting() {
+        addProducts();
+        assertEquals(78, bucket.getTotalSum());
     }
     private void addProducts() {
         bucket.addProduct(TestsHelper.createChocolate());
