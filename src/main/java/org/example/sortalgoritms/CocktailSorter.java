@@ -29,9 +29,9 @@ public class CocktailSorter<T extends Comparable<T>> implements ArraySorter<T> {
             }
         } while (swapped);
     }
-    private void swap(T[] arr, int pos) {
-        T temp = arr[pos];
-        arr[pos] = arr[pos + 1];
-        arr[pos + 1] = temp;
+    private void swap(T[] arr, int index) {
+        T temp = arr[index];
+        arr[index] = arr[index + 1];
+        arr[index + 1] = temp;
     }
 }
