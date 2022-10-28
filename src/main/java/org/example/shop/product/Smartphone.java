@@ -1,14 +1,19 @@
 package org.example.shop.product;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.shop.product.currency.Currency;
+import org.hibernate.Hibernate;
+
+import javax.persistence.Entity;
+import java.util.Objects;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@Entity
 public class Smartphone extends AbstractProduct {
     private String model;
     private int memoryCapacity;
@@ -29,5 +34,18 @@ public class Smartphone extends AbstractProduct {
                 ", price=" + price +
                 ", purchasingCurrency=" + purchasingCurrency +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Smartphone that = (Smartphone) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
