@@ -30,7 +30,7 @@ public class Bucket implements Serializable {
         }
     }
 
-    public void deleteProduct(int pos) {
+   public void deleteProduct(int pos) {
         AbstractProduct product = products.get(pos);
         if (!products.remove(product)) {
             ConsoleHelper.printLine("Bucket doesn't contain this product");
