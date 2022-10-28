@@ -8,12 +8,8 @@ import org.example.shop.product.currency.StandardCurrency;
 
 public class PriceCounter {
     public static void recountPrice(AbstractProduct abstractProduct) {
-        CurrencyStrategy currencyStrategy;
-        if (abstractProduct.getPurchasingCurrency() != Currency.UAH) {
-            currencyStrategy = new ForeignCurrency();
-        } else {
-            currencyStrategy = new StandardCurrency();
-        }
+        CurrencyStrategy currencyStrategy = Currency.UAH != abstractProduct.getPurchasingCurrency() ?
+                new ForeignCurrency() : new StandardCurrency();
         abstractProduct = currencyStrategy.recountPrice(abstractProduct);
         abstractProduct.setPrice(round(abstractProduct.getPrice()));
     }
