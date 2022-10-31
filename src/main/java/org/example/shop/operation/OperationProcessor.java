@@ -1,12 +1,14 @@
 package org.example.shop.operation;
 
 import org.example.shop.Bucket;
-import org.example.shop.Storage;
+import org.example.shop.Warehouse;
 import org.example.shop.product.AbstractProduct;
 import org.example.shop.util.ConsoleHelper;
+import org.example.shop.util.SerializationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,7 +20,8 @@ public class OperationProcessor {
         this.bucket = bucket;
     }
 
-    public void getInput() {
+    public void process() {
+        loadBucket();
         String input;
         while (true) {
             printAllOperations();
@@ -28,7 +31,9 @@ public class OperationProcessor {
             }
             chooseOperation(input);
         }
+        saveBucket();
     }
+
     public void chooseOperation(String operation) {
         Operation currentOperation;
         switch (operation) {
@@ -37,6 +42,7 @@ public class OperationProcessor {
             case "3" -> currentOperation = Operation.SHOW_BUCKET;
             case "4" -> currentOperation = Operation.DELETE_PRODUCT;
             case "5" -> currentOperation = Operation.CLEAR_BUCKET;
+            case "6" -> currentOperation = Operation.SEE_CURRENT_BUCKET_AMOUNT;
             default -> currentOperation = Operation.UNKNOWN_OPERATION;
         }
         processOperation(currentOperation);
@@ -49,7 +55,8 @@ public class OperationProcessor {
                 "3. Show products in the bucket\n" +
                 "4. Delete(particular) product from the bucket\n" +
                 "5. Clear the bucket\n" +
-                "Enter number of the needed operation:");
+                "6. See current amount to pay\n" +
+                "Enter number of the needed operation:\n");
     }
 
     private void processOperation(Operation operation) {
@@ -59,6 +66,7 @@ public class OperationProcessor {
             case SHOW_BUCKET -> showProductsInBucket();
             case CLEAR_BUCKET -> clearBucket();
             case DELETE_PRODUCT -> deleteProductInBucket();
+            case SEE_CURRENT_BUCKET_AMOUNT -> seeBucketAmount();
             case UNKNOWN_OPERATION -> processUnknownOperation();
         }
     }
@@ -66,7 +74,7 @@ public class OperationProcessor {
     private void showProductList() {
         ConsoleHelper.printLine("All available products are:");
         AtomicInteger position = new AtomicInteger();
-        Storage.getAllProducts()
+        Warehouse.getAllProducts()
                 .forEach(x -> ConsoleHelper.printLine(position.incrementAndGet() + " " + x));
     }
 
@@ -74,25 +82,24 @@ public class OperationProcessor {
         ConsoleHelper.printLine("Adding product to the bucket");
         int productNumber;
         try {
-            productNumber = getProductNumber(Storage.getAllProducts());
+            productNumber = getProductNumber(Warehouse.getAllProducts());
         } catch (IllegalArgumentException e) {
             ConsoleHelper.printLine("Wrong number entered");
             logger.warn("Wrong symbol entered", e);
             return;
         }
-        bucket.addProduct(Storage.getAllProducts().get(productNumber));
+        bucket.addProduct(Warehouse.getAllProducts().get(productNumber));
     }
 
     private void showProductsInBucket() {
-        ConsoleHelper.printLine("The bucket contains:");
-        bucket.printBucketContent();
+        bucket.printContent();
     }
 
     private void deleteProductInBucket() {
         ConsoleHelper.printLine("Deleting product from the bucket");
         int productNumber;
         try {
-            productNumber = getProductNumber(bucket.getProductsInBucket());
+            productNumber = getProductNumber(bucket.getProducts());
         } catch (IllegalArgumentException e) {
             ConsoleHelper.printLine("Wrong number entered");
             logger.warn("Wrong symbol entered", e);
@@ -103,7 +110,6 @@ public class OperationProcessor {
 
     private void clearBucket() {
         bucket.clear();
-        ConsoleHelper.printLine("The bucket is empty now");
     }
 
     private void processUnknownOperation() {
@@ -118,5 +124,25 @@ public class OperationProcessor {
             throw new IllegalArgumentException();
         }
         return --number;
+    }
+
+    private void seeBucketAmount() {
+        ConsoleHelper.printLine("Current bucket amount is: " + bucket.getTotalSum());
+    }
+
+    private void saveBucket() {
+        try {
+            SerializationUtil.serialize(bucket);
+        } catch (IOException e) {
+            logger.warn("Failure to serialize bucket", e);
+        }
+    }
+
+    private void loadBucket() {
+        try {
+            bucket = (Bucket) SerializationUtil.deserialize();
+        } catch (IOException | ClassNotFoundException e) {
+            logger.warn("Failure to deserialize bucket", e);
+        }
     }
 }

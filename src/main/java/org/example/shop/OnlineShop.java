@@ -22,7 +22,7 @@ public class OnlineShop {
     }
 
     private void startOperations() {
-        operationProcessor.getInput();
+        operationProcessor.process();
     }
 
     private void greetUser() {

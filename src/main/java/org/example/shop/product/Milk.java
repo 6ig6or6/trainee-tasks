@@ -10,20 +10,20 @@ import org.example.shop.product.currency.Currency;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @Edible
-public class Juice extends AbstractProduct {
-    private double volume;
+public class Milk extends AbstractProduct {
+    private float fatContent;
 
     @Builder
-    public Juice(String name, double price, double volume, int numberOfStorageDays) {
+    public Milk(String name, double price, float fatContent, int numberOfStorageDays) {
         super(name, price, Currency.UAH);
-        this.volume = volume;
+        this.fatContent = fatContent;
         this.numberOfStorageDays = numberOfStorageDays;
     }
 
     @Override
     public String toString() {
-        return "Juice{" +
-                "volume=" + volume +
+        return "Milk{" +
+                "fatContent=" + fatContent +
                 ", expirationDate=" + expirationDate +
                 ", name='" + name + '\'' +
                 ", price=" + price +

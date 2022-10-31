@@ -6,5 +6,6 @@ public enum Operation {
     SHOW_BUCKET,
     DELETE_PRODUCT,
     CLEAR_BUCKET,
+    SEE_CURRENT_BUCKET_AMOUNT,
     UNKNOWN_OPERATION
 }

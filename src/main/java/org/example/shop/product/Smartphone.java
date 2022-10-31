@@ -1,18 +1,21 @@
 package org.example.shop.product;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.shop.product.currency.Currency;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 public class Smartphone extends AbstractProduct {
     private String model;
     private int memoryCapacity;
 
     @Builder
-    public Smartphone(String name, double price, boolean isEdible, String model, int memoryCapacity) {
-        super(name, price, isEdible);
+    public Smartphone(String name, double price, String model, int memoryCapacity) {
+        super(name, price, Currency.UAH);
         this.model = model;
         this.memoryCapacity = memoryCapacity;
     }
@@ -24,7 +27,7 @@ public class Smartphone extends AbstractProduct {
                 ", memoryCapacity=" + memoryCapacity +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", isEdible=" + isEdible +
+                ", purchasingCurrency=" + purchasingCurrency +
                 '}';
     }
 }
