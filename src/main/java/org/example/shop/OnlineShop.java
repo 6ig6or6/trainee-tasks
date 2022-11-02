@@ -2,17 +2,14 @@ package org.example.shop;
 
 import org.example.shop.operation.OperationProcessor;
 import org.example.shop.util.ConsoleHelper;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OnlineShop {
-    private OperationProcessor operationProcessor;
+    private final OperationProcessor operationProcessor;
 
-    public OnlineShop() {
-        this.operationProcessor = new OperationProcessor(new Bucket());
-    }
-
-    public static void main(String[] args) {
-        OnlineShop onlineShop = new OnlineShop();
-        onlineShop.start();
+    public OnlineShop(OperationProcessor operationProcessor) {
+        this.operationProcessor = operationProcessor;
     }
 
     public void start() {

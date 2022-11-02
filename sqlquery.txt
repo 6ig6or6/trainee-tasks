@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS order_info (
+ order_id INT,
+ creation_date DATE,
+ order_sum INT,
+ is_processed BOOLEAN
+ );
+
+CREATE TRIGGER orders_insert
+BEFORE INSERT
+ON orders
+FOR EACH ROW
+INSERT INTO order_info
+VALUES(NEW.id, NOW(), NEW.sum, FALSE);
+
+CREATE TRIGGER orders_update
+AFTER INSERT
+ON orders
+FOR EACH ROW
+UPDATE order_info
+SET is_processed = TRUE
+WHERE order_id = NEW.id;
+
+CREATE PROCEDURE `getUserInfoById` (id VARCHAR(36))
+BEGIN
+ SELECT id, sum, creation_date FROM orders
+   LEFT JOIN order_info ON orders.id = order_info.order_id
+   WHERE user_id = id;
+END

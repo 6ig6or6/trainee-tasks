@@ -1,23 +1,25 @@
-package org.example.shop;
+package org.example.shop.user;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.shop.product.AbstractProduct;
 import org.example.shop.util.ConsoleHelper;
 import org.example.shop.util.PriceCounter;
 
-import java.io.Serial;
-import java.io.Serializable;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Bucket implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private final List<AbstractProduct> products;
-
-    public Bucket() {
-        this.products = new ArrayList<>();
-    }
+@Embeddable
+@NoArgsConstructor
+@Getter
+@Setter
+public class Bucket {
+    @JoinColumn(name = "user_id")
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private final List<AbstractProduct> products = new ArrayList<>();
 
     public void printContent() {
         if (products.isEmpty()) {
@@ -25,12 +27,11 @@ public class Bucket implements Serializable {
         } else {
             ConsoleHelper.printLine("The bucket contains:");
             AtomicInteger position = new AtomicInteger();
-            products
-                    .forEach(x -> ConsoleHelper.printLine(position.incrementAndGet() + " " + x));
+            products.forEach(x -> ConsoleHelper.printLine(position.incrementAndGet() + " " + x));
         }
     }
 
-   public void deleteProduct(int pos) {
+    public void deleteProduct(int pos) {
         AbstractProduct product = products.get(pos);
         if (!products.remove(product)) {
             ConsoleHelper.printLine("Bucket doesn't contain this product");
