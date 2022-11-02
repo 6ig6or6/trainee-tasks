@@ -67,6 +67,7 @@ public class OperationProcessor {
         }
     }
 
+
     private void printAllOperations() {
         ConsoleHelper.printLine("Choose needed operation or press exit:\n" +
                 "1. Show product list.\n" +

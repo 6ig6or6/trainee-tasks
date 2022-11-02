@@ -10,11 +10,12 @@ import org.hibernate.Hibernate;
 import javax.persistence.Entity;
 import java.util.Objects;
 
-@Setter
-@Getter
+
 @Edible
 @NoArgsConstructor
 @Entity
+@Setter
+@Getter
 public class ChocolateBar extends AbstractProduct {
     private boolean isMilkChocolate;
 

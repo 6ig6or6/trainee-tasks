@@ -20,7 +20,6 @@ public abstract class AbstractProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NonNull
     protected String name;
     @NonNull
