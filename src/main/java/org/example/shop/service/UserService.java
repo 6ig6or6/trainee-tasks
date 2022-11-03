@@ -1,37 +1,59 @@
 package org.example.shop.service;
 
-import org.example.shop.user.Bucket;
+import org.example.shop.dto.UserDTO;
 import org.example.shop.exception.UserNotFoundException;
 import org.example.shop.repository.UserRepository;
-import org.example.shop.user.User;
-import org.example.shop.util.ConsoleHelper;
+import org.example.shop.entity.user.Role;
+import org.example.shop.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Locale;
 import java.util.UUID;
 
 @Service
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public User registerUser(User user) {
+    public User registerUser(UserDTO userDTO) {
+        User user = new User();
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        setRole(user);
         logger.debug("User with UUID {} was registered", user.getId());
         return userRepository.save(user);
     }
 
     @Transactional
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public User updateUser(User user) {
         logger.debug("User with UUID {} was updated", user.getId());
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User updateUserById(String id, UserDTO userDTO) {
+        User user = userRepository
+                .getUserById(UUID.fromString(id))
+                .orElseThrow(UserNotFoundException::new);
+        user.setPassword(userDTO.getPassword());
+        logger.debug("Updating user with id {}", user.getId());
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUserById(String id) {
+        User user = getUser(id);
+        userRepository.delete(user);
+        logger.debug("Deleting user with id {}", id);
     }
 
     public User getUser(String uuid) {
@@ -40,32 +62,20 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    @Transactional
-    public User registerNewUser() {
-        User user = new User();
-        user.setBucket(new Bucket());
-        logger.debug("Creating new user");
-        return registerUser(user);
-    }
-
-    public User checkForRegistration() {
-        logger.debug("Checking for user's registration was started");
-        ConsoleHelper.printLine("Do you have an account already?\n" +
-                "Enter yes or no");
-        String answer = ConsoleHelper.readLine().toLowerCase(Locale.ROOT);
-        if ("yes".equals(answer)) {
-            ConsoleHelper.printLine("Enter you personal UUID");
-            String uuid = ConsoleHelper.readLine();
-            logger.debug("The client entered 'yes', calling getUser method");
-            return getUser(uuid);
-        } else if ("no".equals(answer)) {
-            User user = registerNewUser();
-            ConsoleHelper.printLine("Your personal UUID is " + user.getId());
-            logger.debug("The client entered 'no', calling registerNewUser method");
-            return user;
+    /**
+     * First registered user is admin, then 3 managers and then all users
+     */
+    private void setRole(User user) {
+        int quantityOfRegisteredUsers = userRepository.countAllBy();
+        if (quantityOfRegisteredUsers == 0) {
+            user.setRole(Role.ADMIN);
+            logger.info("Setting role Admin for user {}", user.getId());
+        } else if (quantityOfRegisteredUsers > 0 && quantityOfRegisteredUsers < 4) {
+            user.setRole(Role.MANAGER);
+            logger.info("Setting role Manager for user {}", user.getId());
         } else {
-            logger.warn("User entered unknown answer on registration stage");
-            throw new UserNotFoundException();
+            user.setRole(Role.USER);
+            logger.info("Setting standard role for user {}", user.getId());
         }
     }
 }

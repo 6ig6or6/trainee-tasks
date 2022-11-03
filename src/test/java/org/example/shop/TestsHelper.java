@@ -1,40 +1,44 @@
 package org.example.shop;
 
-import org.example.shop.product.ChocolateBar;
-import org.example.shop.product.Juice;
-import org.example.shop.product.Screwdriver;
-import org.example.shop.product.Smartphone;
+import org.example.shop.product.Product;
+import org.example.shop.product.currency.Currency;
 
 public class TestsHelper {
-    public static Juice createJuice() {
-        return Juice.builder()
+    public static Product createJuice() {
+        return Product.builder()
                 .name("Orange juice")
                 .price(20)
-                .volume(0.9).build();
+                .description("Super cheap")
+                .purchasingCurrency(Currency.EUR)
+                .numberOfStorageDays(30)
+                .build();
     }
 
-    public static ChocolateBar createChocolate() {
-        return ChocolateBar.builder()
+    public static Product createChocolate() {
+        return Product.builder()
                 .name("Milka")
                 .price(25)
-                .isMilkChocolate(true)
+                .description("Milk chocolate")
+                .purchasingCurrency(Currency.USD)
+                .numberOfStorageDays(120)
                 .build();
     }
 
-    public static Screwdriver createScrewdriver() {
-        return Screwdriver.builder()
+    public static Product createScrewdriver() {
+        return Product.builder()
                 .name("Wooden screwdriver")
                 .price(5)
-                .material("wood")
+                .description("With furniture")
+                .purchasingCurrency(Currency.UAH)
                 .build();
     }
 
-    public static Smartphone createSmartphone() {
-        return Smartphone.builder()
+    public static Product createSmartphone() {
+        return Product.builder()
                 .name("Smartphone Google")
                 .price(1000)
-                .model("pixel 6")
-                .memoryCapacity(128)
+                .description("pixel 6")
+                .purchasingCurrency(Currency.PLN)
                 .build();
     }
 }
