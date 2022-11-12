@@ -1,8 +1,10 @@
-package org.example.shop.user;
+package org.example.shop.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.example.shop.entity.Bucket;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -19,6 +21,9 @@ public class User {
     @Column(columnDefinition = "char(36)")
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+    private Role role;
     @ToString.Exclude
     @Embedded
     private Bucket bucket;

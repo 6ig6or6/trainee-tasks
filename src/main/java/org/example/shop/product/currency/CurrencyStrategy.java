@@ -1,7 +1,7 @@
 package org.example.shop.product.currency;
 
-import org.example.shop.product.AbstractProduct;
+import org.example.shop.product.Product;
 
 public interface CurrencyStrategy {
-    AbstractProduct recountPrice(AbstractProduct abstractProduct);
+    Product recountPrice(Product product);
 }

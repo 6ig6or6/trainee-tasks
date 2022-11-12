@@ -10,21 +10,19 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "products")
-public abstract class AbstractProduct {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull
     protected String name;
-    @NonNull
+    protected String description;
     protected double price;
-    @NonNull
     @Enumerated(EnumType.STRING)
     protected Currency purchasingCurrency;
     protected LocalDate expirationDate;
@@ -35,7 +33,7 @@ public abstract class AbstractProduct {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AbstractProduct product = (AbstractProduct) o;
+        Product product = (Product) o;
         return id != null && Objects.equals(id, product.id);
     }
 
